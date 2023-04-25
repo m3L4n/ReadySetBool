@@ -28,7 +28,7 @@ fn print_truth_table(formula: &str) {
     print!("= |");
     println!("");
     let n = operands.len();
-    let max_iteration = (1 << n) -1;
+    let max_iteration = (1 << n) -1; 
     for i in 0..=max_iteration {
         let mut stack = Vec::new();
         for c in formula.chars() {

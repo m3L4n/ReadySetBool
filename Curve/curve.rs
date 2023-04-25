@@ -1,4 +1,5 @@
 
+//https://www.researchgate.net/figure/Morton-space-filling-curve-for-an-8-8-matrix-The-interactions-are-sorted-according-to_fig2_48304794
 fn add_bit_to_flat(x: u16, y:u16, result : &mut u32){
 
   let max_iteration = 15;
@@ -20,7 +21,6 @@ fn add_bit_to_flat(x: u16, y:u16, result : &mut u32){
     n1 = n1 << 1;
 
   }
-
 
 }
 fn map(x: u16, y: u16) -> f64{

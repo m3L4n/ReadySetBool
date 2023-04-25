@@ -1,27 +1,29 @@
 /**
-  respecte la complexite O(1)
-  si le temps d'exécution d'un algorithme dépend de la taille de l'entrée,
-   sa complexité en temps n'est pas en O(1).
-    Par exemple, si vous avez une fonction qui parcourt une liste d'éléments et qui effectue une opération sur chaque élément de la liste, 
-    le temps d'exécution de cette fonction dépend de la taille de la liste et sa complexité en temps n'est pas en O(1).
+    respect la complexite car ne depend pas de la taille  du n nombre et sera constant  et effectue les mm operatons quoi qu'il arrive.
 */
 fn adder(a: u32, b: u32) -> u32
 {
   let mut x = a;
   let mut y = b;
-  let mut sum = a^ b;
+  let mut sum = a ^ b;
   let mut carry = (a & b) << 1;
+  
+  //5  0000 0101
+  //6  0000 0110
+  // -> sum = 0000 0011 -> 3 ( a ^ b )
+  // carry = 0000 0100   -> ( a & b ) et on decalle de 1 = 0000 1000 - > ca nous donne 8
+  // sum = 0000 1011 - > 11 
+  // carry = 0000 00000 = 0 ;
+  //carry = 0 
   if sum == 0
   {
     return carry;
   }
-  // il n;est pas oblige de faire une boucle pour les petit npombre
-  while carry != 0 { // on boucle sur le fait qu'il a des retenu donc on doit encore decaler
+  while carry != 0 { // on boucle sur le fait qu'il a des retenu 
       sum = x ^ y;  // nous sert a avoir la retenu sans les bites , donc on a la premiere parti du calcul
       carry = (x & y) << 1; // ca nous permet d;avoir la retenu donc les retenu des bites que l'on a quand on les additionne car le AND & met a 1 que si c egal  c'est l'inverse du xor et on va le << 1 pour tout decaler pour avoir du coup la retenu
-      x = sum;  // exemple avec 13 et 9 -> 4 le xor a enlever tout les bites pareil et a on ceux pas pareil
-      y = carry; // and est de 9 >   mais ca correspond a nos retenu du coup il faut les decaler vers la gauche c a d les n ^ 2*1
-  // on boucle jusqua temps qu'il n'a pas de retenu !! ( au niveau de l'addition des bites)
+      x = sum;  
+      y = carry; 
     }
     x = sum;
     return x;

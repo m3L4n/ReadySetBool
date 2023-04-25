@@ -145,7 +145,20 @@ fn conjective(&mut self){
     Some(right) => right.conjective(),
   }
   match self.data{
-
+      '&' => {
+        if let Some(right) =  &mut self.right {
+          if right.data.is_ascii_uppercase() || right.data == '!'{
+            if let Some(left) =  &mut self.left {
+              if left.data == '&'{
+                let tmp_right_node = self.left.take();
+                let tmp_left_node = self.right.take();
+                self.right  = tmp_right_node;
+                self.left  = tmp_left_node;
+              }
+            }
+          }
+        }
+      }
       '|' => {
         let  var_first_noeud = self.data;
         if let Some(right) =  &mut self.right {
@@ -179,8 +192,22 @@ fn conjective(&mut self){
               }
             }
           }
+          else if right.data.is_ascii_uppercase() || right.data == '!' {
+              if let Some(left) =  &mut self.left {
+                if left.data == '|'{
+                      let tmp_right_node = self.left.take();
+                      let tmp_left_node = self.right.take();
+                      self.right  = tmp_right_node;
+                      self.left  = tmp_left_node;
+                  }
+                }
+              }
+            
+        
+            }
+
+
         }
-      }
       _ => {
       }
   }
@@ -192,120 +219,29 @@ fn parse(root : &mut Node ,string :&str){
     root.insert_string_into_bst( &mut string_chars);
 }
 
-fn is_need_to_be_conjuctify(string :&str) -> bool{
-  let mut conjonctive = 0;
-  let mut disjonctive = 0;
-  for c in string.chars(){
-    if  c == '|' {
-      disjonctive += 1;
-    }
-    else if c == '&' {
-      conjonctive += 1;
-    }
-  }
-  if conjonctive >= 1 && disjonctive >= 1{
-      return false;
-  }
-  return true;
-}
-
-fn add_node_to_right_of_root(root: &mut  Node, data: char) {
-      // Créer un nouveau nœud pour le côté droit de la racine
-      let mut new_right = Node::new(data);
-      new_right.right = root.right.take();
-      // Ajouter le nouveau nœud à droite de la racine
-      root.right = Some(Box::new(new_right));
-  }
-
-fn delete_currenr_node(node: &mut Node, profondeur: usize) {
-  let mut i = 0;
-  let mut current_node = node;
-  while let Some(left) = &mut current_node.left {
-    if i == profondeur {
-      current_node.data = current_node.right.as_mut().unwrap().data;
-      if current_node.right.as_mut().unwrap().data == '!'{
-        current_node.right = Some(current_node.right.as_mut().unwrap().right.as_mut().unwrap().clone_with_children());
-      }
-      else{
-
-        current_node.right = None;
-      }
-      break;
-    }
-    i+=1;
-    current_node = left;
-  }
-}
-fn traverse(node: &mut Node) {
-  let mut  i = 0;
-  let mut current_node = node.clone_with_children();
-    
-  while let Some(left) = &mut current_node.left {
-    if left.data == '|'{
-      if current_node.right.as_mut().unwrap().data.is_ascii_uppercase(){
-        current_node.data = current_node.right.as_mut().unwrap().data;
-        current_node.right = None;
-        i += 1;
-        add_node_to_right_of_root(node, '|');
-        delete_currenr_node(node, i);
-      }
-      else if current_node.right.as_mut().unwrap().data == '!'{
-        if current_node.right.as_mut().unwrap().right.as_mut().unwrap().data.is_ascii_uppercase(){
-          current_node.data = current_node.right.as_mut().unwrap().data;
-          let new_node = Node::new(current_node.right.as_mut().unwrap().right.as_mut().unwrap().data);
-          current_node.right =Some(Box::new(new_node));
-          i +=1;
-          add_node_to_right_of_root(node, '|');
-          delete_currenr_node(node, i);
-        }
-      }
-    }
-    if left.data == '&'{
-      if current_node.right.as_mut().unwrap().data.is_ascii_uppercase(){
-        current_node.data = current_node.right.as_mut().unwrap().data;
-        current_node.right = None;
-        i += 1;
-        add_node_to_right_of_root(node, '&');
-        delete_currenr_node(node, i);
-      }
-      else if current_node.right.as_mut().unwrap().data == '!'{
-      if current_node.right.as_mut().unwrap().right.as_mut().unwrap().data.is_ascii_uppercase(){
-        current_node.data = current_node.right.as_mut().unwrap().data;
-        let new_node = Node::new(current_node.right.as_mut().unwrap().right.as_mut().unwrap().data);
-        current_node.right =Some(Box::new(new_node));
-        i += 1;
-        add_node_to_right_of_root(node, '&');
-        delete_currenr_node(node, i);
-      }
-    }
-    }
-      current_node = left.clone_with_children();
-  }
-}
 fn conjunctive_normal_form(formula: &str) -> String{
   let mut root = Node::new('1');
   parse(&mut root, formula);
   root.move_right_place();
-  let result_nnf = root.get_tree_preorder();
-  let result = is_need_to_be_conjuctify(&result_nnf);
-  if result == true
-  {
-    traverse(&mut root);
-  }
-  else{
+
     root.conjective();
-  }
+ // }
   return root.get_tree_preorder();
 }
 
 fn main(){
- println!("{}", conjunctive_normal_form("AB|!"));
  println!("{}", conjunctive_normal_form("AB&!"));
+ // A!B!|
+ println!("{}", conjunctive_normal_form("AB|!"));
+ // A!B!&
  println!("{}", conjunctive_normal_form("AB|C&"));
+ // AB|C&
  println!("{}", conjunctive_normal_form("AB|C|D|"));
+ // ABCD|||
  println!("{}", conjunctive_normal_form("AB&C&D&"));
- println!("{}", conjunctive_normal_form("AB!CD&|&"));
- println!("{}", conjunctive_normal_form("ABCD&|&"));
- println!("{}", conjunctive_normal_form("AB|!C!&"));
- println!("{}",  conjunctive_normal_form("AB&!C!|"));
+ // ABCD&&&
+ println!("{}", conjunctive_normal_form("AB&!C!|"));
+ // A!B!C!||
+ println!("{}", conjunctive_normal_form("ABDE&|&"));
+ // A!B!C!&&
 }

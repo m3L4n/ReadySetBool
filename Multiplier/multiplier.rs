@@ -22,6 +22,14 @@ fn adder(a: u32, b: u32) -> u32
 *http://fabrice.sincere.pagesperso-orange.fr/cm_electronique/electronique_numerique20/annexe/conversion_decimal_hexa02.pdf
 tableau pour mieux comprendre comment ca se passe 
 */
+//x  0000 0010 (=2)
+//y  0000 0011 (=3)
+//z  0000 0001 (=1 y & 1)
+//result = 0 + (2) = 000 0010 (2)
+// x 0000 0100 (4)
+// y 0000 0001 (1) 
+// z 0000 0001 (1 y & 1)
+// result 2+ 4 = 000 0110 (6)
 fn multiplier(a: u32, b: u32) -> u32{
 
   let mut result = 0;
