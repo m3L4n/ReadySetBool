@@ -27,11 +27,11 @@ fn map(x: u16, y: u16) -> f64 {
 }
 
 fn main() {
-    println!("{}", map(65535, 65534));
-    println!("{}", map(65534, 65535));
-    println!("{}", map(65534, 65535));
-    println!("{}", map(5, 7));
-    println!("{}", map(47, 19));
+    println!(" 65535, 65534 -> {}", map(65535, 65534));
+    println!(" 65534, 65535 -> {}", map(65534, 65535));
+    println!("65534, 65535  -> {}", map(65534, 65535));
+    println!("5, 7  -> {}", map(5, 7));
+    println!("47, 19 -> {}", map(47, 19));
     println!("{}", map(u16::MAX / 2 + 1, 0)); // milieu de la space curve
     println!("{}", map(u16::MAX / 2, u16::MAX));
 }
