@@ -1,6 +1,6 @@
 # ReadySetBool
 
-An introduction to Boolean Algebra
+An introduction to Boolean Algebra in rust
 
 Exercise 00 - Adder
 
