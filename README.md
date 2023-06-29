@@ -2,7 +2,7 @@
 
 An introduction to Boolean Algebra
 
-Exercise 00 - Adder
+Exercise 00 - Adder\n
 Exercise 01 - Multiplier
 Exercise 02 - Gray code
 Exercise 03 - Boolean evaluation
